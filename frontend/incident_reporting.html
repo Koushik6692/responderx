@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Reporting and Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold">ResponderX</div>
+            <div>
+                <a href="/dashboard" class="text-white px-4 py-2 hover:bg-blue-700 rounded">Home</a>
+                <a href="/reports" class="text-white px-4 py-2 hover:bg-blue-700 rounded">View Reports</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Incident Reporting and Management</h1>
+        <form id="incidentForm" class="bg-white p-8 rounded-lg shadow-lg space-y-6" enctype="multipart/form-data">
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description of Incident:</label>
+                <textarea id="description" name="description" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+            </div>
+           
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700">Type of Disaster:</label>
+                <select id="type" name="type" onchange="updateRequirements()" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">Select Type</option>
+                    <option value="earthquake">Earthquake</option>
+                    <option value="flood">Flood</option>
+                    <option value="hurricane">Hurricane</option>
+                    <option value="fire">Fire</option>
+                    <option value="landslide">Landslide</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div id="requirements" class="checkbox-group"></div>
+
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
+                <button type="button" onclick="getLocation()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Location</button>
+                <input type="text" id="location" name="location" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+
+            <div id="map" class="h-64 w-full rounded-lg shadow mb-6"></div>
+
+            <div>
+                <label for="incidentDate" class="block text-sm font-medium text-gray-700">Date and Time:</label>
+                <button type="button" onclick="setCurrentDateTime()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Date and Time</button>
+                <input type="datetime-local" id="incidentDate" name="incidentDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="severity" class="block text-sm font-medium text-gray-700">Severity Level:</label>
+                <select id="severity" name="severity" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="minor">Minor</option>
+                    <option value="major">Major</option>
+                    <option value="critical">Critical</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="media" class="block text-sm font-medium text-gray-700">Upload Media (Images, Videos):</label>
+                <div id="mediaOptions" class="mt-1 mb-2">
+                    <input type="file" id="media" name="media" accept="image/*,video/*" onchange="previewMedia()" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+                <div class="media-display" id="mediaDisplay"></div>
+            </div>
+
+            <div>
+                <input type="submit" value="Report Incident" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">
+            </div>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function(event) {
+                placeMarker(event.latlng);
+                document.getElementById('location').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
+            });
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setLatLng(location);
+            } else {
+                marker = L.marker(location).addTo(map);
+            }
+            map.setView(location);
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    document.getElementById('location').value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    let currentLocation = L.latLng(latitude, longitude);
+                    placeMarker(currentLocation);
+                    map.setView(currentLocation);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function setCurrentDateTime() {
+            const now = new Date();
+            const datetimeLocal = now.toISOString().slice(0, 16);
+            document.getElementById('incidentDate').value = datetimeLocal;
+        }
+
+        function updateRequirements() {
+            const disasterType = document.getElementById('type').value;
+            const requirementsDiv = document.getElementById('requirements');
+            let requirements = [];
+
+            switch (disasterType) {
+                case 'earthquake':
+                    requirements = [
+                        'Search and rescue teams',
+                        'Medical assistance and first aid',
+                        'Temporary shelter and food'
+                    ];
+                    break;
+                case 'flood':
+                    requirements = [
+                        'Evacuation of affected areas',
+                        'Emergency food and water supplies',
+                        'Medical care for flood-related injuries',
+                        'Boats and other water transport for rescue'
+                    ];
+                    break;
+                case 'hurricane':
+                    requirements = [
+                        'Evacuation and shelter for those in the storm’s path',
+                        'Medical care for injuries and storm-related issues',
+                        'Provision of food, water, and emergency supplies',
+                        'Search and rescue operations',
+                        'Debris removal and cleanup'
+                    ];
+                    break;
+                case 'fire':
+                    requirements = [
+                        'Firefighting teams and equipment',
+                        'Evacuation of affected areas',
+                        'Medical care for burns and smoke inhalation',
+                        'Provision of temporary shelters and food',
+                        'Support for firefighters and first responders'
+                    ];
+                    break;
+                case 'landslide':
+                    requirements = [
+                        'Search and rescue operations for trapped individuals',
+                        'Medical care for injuries',
+                        'Evacuation of affected areas',
+                        'Clearing of landslide debris',
+                        'Provision of temporary shelter and food'
+                    ];
+                    break;
+                case 'other':
+                    requirements = [
+                        'Evacuation and rescue operations',
+                        'Emergency medical care',
+                        'Provision of food, water, and temporary shelter',
+                        'Support for emergency responders and victims'
+                    ];
+                    break;
+                default:
+                    requirements = [];
+            }
+
+            let html = '';
+            requirements.forEach(req => {
+                html += `<label><input type="checkbox" name="necessities" value="${req}"> ${req}</label>`;
+            });
+            requirementsDiv.innerHTML = html;
+        }
+
+        function previewMedia() {
+            const mediaInput = document.getElementById('media');
+            const mediaDisplay = document.getElementById('mediaDisplay');
+            mediaDisplay.innerHTML = ''; // Clear previous media preview
+
+            const file = mediaInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaType = file.type.startsWith('image') ? 'image' : 'video';
+                    const mediaElement = document.createElement(mediaType);
+                    mediaElement.src = e.target.result;
+                    if (mediaType === 'video') {
+                        mediaElement.controls = true;
+                    }
+                    mediaDisplay.appendChild(mediaElement);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('incidentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            const response = await fetch('/api/reports/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Report submitted successfully');
+                e.target.reset();
+                document.getElementById('mediaDisplay').innerHTML = ''; // Clear media preview after submission
+            } else {
+                alert('Error: ' + await response.text());
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>

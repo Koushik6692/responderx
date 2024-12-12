@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <nav class="bg-blue-900 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/dashboard" class="text-white text-2xl font-bold">Home</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10">
+        <!-- Join as a Volunteer Section -->
+        <div class="bg-white p-8 rounded-lg shadow-lg mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Join as a Volunteer</h2>
+            <form id="volunteerForm" method="post" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label for="volunteerName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="volunteerName" name="volunteerName" placeholder="Enter your full name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="volunteerEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="volunteerEmail" name="volunteerEmail" placeholder="Enter your email address" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="volunteerPhone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="Enter your phone number" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                
+                <div>
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="volunteerSkills" class="block text-sm font-medium text-gray-700">Skills</label>
+                    <!-- Main Skill Categories (Collapsibles) -->
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Medical and Health Skills</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="firstAid" name="skills[]" value="First Aid & CPR"> First Aid & CPR</li>
+                            <li><input type="checkbox" id="emt" name="skills[]" value="Emergency Medical Technician (EMT)"> Emergency Medical Technician (EMT)</li>
+                            <li><input type="checkbox" id="mentalHealth" name="skills[]" value="Mental Health Support"> Mental Health Support</li>
+                            <li><input type="checkbox" id="psychFirstAid" name="skills[]" value="Psychological First Aid"> Psychological First Aid</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Fundraising and Advocacy</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="fundraising" name="skills[]" value="Fundraising"> Fundraising</li>
+                            <li><input type="checkbox" id="grantWriting" name="skills[]" value="Grant Writing"> Grant Writing</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Search and Rescue Skills</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="sar" name="skills[]" value="Search and Rescue (SAR)"> Search and Rescue (SAR)</li>
+                            <li><input type="checkbox" id="waterRescue" name="skills[]" value="Water Rescue"> Water Rescue</li>
+                            <li><input type="checkbox" id="urbanSar" name="skills[]" value="Urban Search and Rescue"> Urban Search and Rescue</li>
+                            <li><input type="checkbox" id="heavyEquipment" name="skills[]" value="Heavy Equipment Operation (for debris removal)"> Heavy Equipment Operation (for debris removal)</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Logistics and Supply Management</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="logisticsCoord" name="skills[]" value="Logistics Coordination"> Logistics Coordination</li>
+                            <li><input type="checkbox" id="supplyChain" name="skills[]" value="Supply Chain Management"> Supply Chain Management</li>
+                            <li><input type="checkbox" id="inventoryMgmt" name="skills[]" value="Inventory Management"> Inventory Management</li>
+                            <li><input type="checkbox" id="shelterSetup" name="skills[]" value="Shelter Setup"> Shelter Setup</li>
+                            <li><input type="checkbox" id="waterPurification" name="skills[]" value="Water Purification"> Water Purification</li>
+                            <li><input type="checkbox" id="foodDistribution" name="skills[]" value="Food Distribution"> Food Distribution</li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="collapsible bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition-transform transform hover:scale-105">Safety and Risk Management</button>
+                    <div class="content mt-2 mb-4">
+                        <ul class="space-y-2">
+                            <li><input type="checkbox" id="firefighting" name="skills[]" value="Firefighting"> Firefighting</li>
+                            <li><input type="checkbox" id="hazardousMaterials" name="skills[]" value="Hazardous Materials Handling"> Hazardous Materials Handling</li>
+                            <li><input type="checkbox" id="riskMgmt" name="skills[]" value="Risk Management"> Risk Management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="institutionName" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <input type="text" id="institutionName" name="institutionName" placeholder="Enter your institution name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="course" class="block text-sm font-medium text-gray-700">Course/Field of Study</label>
+                    <select id="course" name="course" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="" disabled selected>Select your course</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Law">Law</option>
+                        <option value="Finance">Finance</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="academicYear" class="block text-sm font-medium text-gray-700">Academic Year/Level</label>
+                    <input type="text" id="academicYear" name="academicYear" placeholder="Enter your academic year/level" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="aadharCard" class="block text-sm font-medium text-gray-700">Aadhar Card / Government-issued ID</label>
+                    <input type="file" id="aadharCard" name="aadharCard" accept="application/pdf,image/*" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="photo" class="block text-sm font-medium text-gray-700">Passport-sized Photograph</label>
+                    <input type="file" id="photo" name="photo" accept="image/*" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <!-- Location Information -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">Location:</label>
+                    <button type="button" onclick="getLocation()" class="mt-1 mb-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">Use Current Location</button>
+                    <input type="text" id="location" name="location" readonly class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div id="map" class="h-64 w-full rounded-lg shadow mb-6"></div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="certified" name="certified" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="certified" class="ml-2 block text-sm text-gray-900">NSS/NCC Certified</label>
+                </div>
+
+                <div>
+                    <label for="certFile" class="block text-sm font-medium text-gray-700">Upload NSS/NCC Certification (PDF only)</label>
+                    <input type="file" id="certFile" name="certFile" accept="application/pdf" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div class="text-center mt-6">
+                    <input type="submit" value="Join as Volunteer" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS for map functionality -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13); // Default location is London
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function (event) {
+                placeMarker(event.latlng);
+                document.getElementById('location').value = `Latitude: ${event.latlng.lat}, Longitude: ${event.latlng.lng}`;
+            });
+
+            // Fix map sizing issues
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setLatLng(location);
+            } else {
+                marker = L.marker(location).addTo(map);
+            }
+            map.setView(location);
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    document.getElementById('location').value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    let currentLocation = L.latLng(latitude, longitude);
+                    placeMarker(currentLocation);
+                    map.setView(currentLocation);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Initialize the map
+        document.addEventListener('DOMContentLoaded', initMap);
+
+        // Collapsible functionality
+        var coll = document.getElementsByClassName("collapsible");
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+
+        document.getElementById('volunteerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            // Extract only the fields defined in the schema
+            const user = {
+                username: formData.get('username'),
+                email: formData.get('volunteerEmail'),
+                password: formData.get('password'),
+                phoneNumber: formData.get('volunteerPhone'),
+                name: formData.get('volunteerName'),
+                skills: formData.getAll('skills[]'),
+                dateOfBirth: formData.get('dob'),
+                location: formData.get('location')
+            };
+
+            console.log(user);
+
+            const response = await fetch('/api/users/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                alert('Volunteer registered successfully');
+                e.target.reset();
+            } else {
+                alert('Error: ' + await response.text());
+            }
+        });
+    </script>
+</body>
+</html>

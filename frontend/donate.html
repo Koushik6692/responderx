@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+        <nav class="mb-6 text-center">
+            <a href="/dashboard" class="text-blue-600 hover:underline">Back</a>
+        </nav>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Donate</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Donate Money</h2>
+                <p class="text-gray-600 mb-6">Help us support those affected by disasters</p>
+                <button class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105" onclick="window.location.href='/donate/money'">Donate Now</button>
+            </div>
+            
+            <div class="card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Donate Resources</h2>
+                <p class="text-gray-600 mb-6">Contribute goods and services to support disaster relief efforts</p>
+                <button class="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-transform transform hover:scale-105" onclick="window.location.href='/donate/resources'">Donate Now</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

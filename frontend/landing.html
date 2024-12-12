@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>ResponderX</title>
+		<meta name="description" content="Demo of a morphing shape animation on scroll." />
+		<meta name="keywords" content="" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="stylesheet" href="https://use.typekit.net/eay5gla.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="manifest" href="/manifest.json">
+		<script>document.documentElement.className="js";</script>
+		<script src="//tympanus.net/codrops/adpacks/analytics.js"></script>
+	</head>
+	<style>
+		.intro__button {
+			display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 139, 0.6); /* Dark blue with 60% opacity */
+            color: white;
+            padding: 20px 30px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(10px); /* Glassmorphism effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .intro__button:hover {
+            background-color: rgba(0, 0, 139, 0.8); /* Darker blue on hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+		.intro__button svg {
+            margin-left: 10px;
+            fill: white;
+            stroke: white;
+            stroke-width: 2; /* Make the arrow thicker */
+        }
+	</style>
+	<body class="loading">
+		<main>
+			<div class="frame">
+			</div>
+			<div class="intro">
+				<div id="item-intro" class="content content--intro">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--1">
+							<div class="content__img-inner" style="background-image:url(img/1.webp); background-color: rgba(0, 0, 0, 0.5); background-blend-mode: multiply;"></div>						</div>
+					</div>
+				</div>
+				<h1 class="intro__title"> 
+					<span class="intro__title-pre">ResponderX</span>
+					<button class="intro__button" onclick="window.location.href='/login'">
+						Get started		
+						<svg id='Right_Arrow_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+							<g transform="matrix(0.42 0 0 0.42 12 12)" >
+								<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" translate(-25.01, -24.99)" d="M 38.035156 13.988281 C 37.628906 13.980469 37.257813 14.222656 37.09375 14.59375 C 36.933594 14.96875 37.015625 15.402344 37.300781 15.691406 L 45.277344 24 L 2.023438 24 C 1.664063 23.996094 1.328125 24.183594 1.148438 24.496094 C 0.964844 24.808594 0.964844 25.191406 1.148438 25.503906 C 1.328125 25.816406 1.664063 26.003906 2.023438 26 L 45.277344 26 L 37.300781 34.308594 C 36.917969 34.707031 36.933594 35.339844 37.332031 35.722656 C 37.730469 36.105469 38.363281 36.09375 38.746094 35.691406 L 49.011719 25 L 38.746094 14.308594 C 38.5625 14.109375 38.304688 13.996094 38.035156 13.988281 Z" stroke-linecap="round" />
+							</g>
+						</svg>			
+					</button> 
+				</h1> 
+				<span style="display: none;" class="intro__info">Scroll moderately for a better animation experience.</span> 
+			</div>
+			<div class="content-wrap">
+				<div id="item-1" class="content">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--1">
+							<div class="content__img-inner" style="background-image:url(img/4.webp);"></div>
+							<div class="content__img-inner content__img-inner--hidden" style="background-image:url(img/3.webp);"></div>
+						</div>
+					</div>
+					<p class="content__text content__text--center content__text--large"><span data-splitting>Unite to Respond</span><span data-splitting>Empowerment even in Crisis</span></p>
+				</div>
+				<div id="item-2" class="content">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--1">
+							<div class="content__img-inner" style="background-image:url(img/3.webp);"></div>
+							<div class="content__img-inner content__img-inner--hidden" style="background-image:url(img/4.webp);"></div>
+						</div>
+					</div>
+					<p class="content__text content__text--left"><span>From Chaos to Coordination</span> <span>Together, We Rise with ResponderX</span></p>
+				</div>
+				<div id="item-3" class="content">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--2">
+							<div class="content__img-inner" style="background-image:url(img/7.jpg);"></div>
+							<div class="content__img-inner content__img-inner--hidden" style="background-image:url(img/8.webp);"></div>
+						</div>
+					</div>
+					<p class="content__text content__text--left">
+						<span>Rescue Beyond Boundaries</span> 
+						<span class="content__text-tiny">
+							What if saving lives could be seamless, even in the face of chaos? What if technology could bridge the gaps between hope and despair? Imagine a world where every call for help is heard, every resource reaches its destination, and every second counts. This isn’t just a vision—it’s a reality with RespondrX. Step into the future of disaster response. Step into resilience.
+						</span>
+					</p>
+				</div>
+				<div id="item-4" class="content">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--4">
+							<div class="content__img-inner" style="background-image:url(img/8.webp);"></div>
+							<div class="content__img-inner content__img-inner--hidden" style="background-image:url(img/10.webp);"></div>
+						</div>
+					</div>
+					<p class="content__text content__text--center"><span>Our Resolve is</span> <span>Saving Lives <span style="font-weight: bold;">Together</span></span></p>
+				</div>
+				<div id="item-6" class="content">
+					<div class="content__img-wrap">
+						<div class="content__img content__img--6">
+							<div class="content__img-inner" style="background-image:url(img/17.webp);"></div>
+						</div>
+					</div>
+					<p class="content__text content__text--center"><span>You were never truly helpless</span> <span>You were always the hero in disguise</span></p>
+				</div>
+			</div>
+			<div class="content">
+				<h2 class="content__title">Our Team</h2>
+				<div style="width: 100%; display: flex; justify-content: space-around;">
+					<div style="display: flex; flex-direction: column; align-items: center;">
+						<img src="img/abhi.jpg" style="width: 140px; height: 140px; border-radius: 50%;" />
+						<h1>Abhi</h1>
+					</div>
+					<div style="display: flex; flex-direction: column; align-items: center;">
+						<img src="img/kishore.jpg" style="width: 140px; height: 140px; border-radius: 50%;" />
+						<h1>kishore</h1>
+					</div>
+					<div style="display: flex; flex-direction: column; align-items: center;">
+						<img src="img/vineeth.jpg" style="width: 140px; height: 140px; border-radius: 50%;" />
+						<h1>Vineeth</h1>
+					</div>
+				</div>
+			</div>
+			<p class="credits">By Team ResponderX</p>
+		</main>
+		<script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script>
+		<script src="js/imagesloaded.pkgd.min.js"></script>
+		<script src="js/splitting.min.js"></script>
+		<script src="js/gsap.min.js"></script>
+		<script src="js/ScrollTrigger.min.js"></script>
+		<script src="js/lenis.min.js"></script>
+		<script type="module" src="js/index.js"></script>
+	</body>
+	<script>
+		if ('serviceWorker' in navigator) {
+		  navigator.serviceWorker.register('/service-worker.js')
+			.then(registration => {
+			  console.log('Service Worker registered with scope:', registration.scope);
+			})
+			.catch(error => {
+			  console.log('Service Worker registration failed:', error);
+			});
+		}
+	</script>	  
+</html>
